@@ -22,35 +22,42 @@ class Graph extends React.Component {
     _.each(edges, (neighbors, idx) => {
       this.nodes[idx] = React.createRef()
       pos[idx] = {
-        x: Math.round(Math.random() * width),
-        y: Math.round(Math.random() * height),
+        x: Math.round(Math.random() * width) - width / 2,
+        y: Math.round(Math.random() * height) - height / 2,
       }
     })
 
     this.state = {
-      mounted: false,
       pos,
+      temperature: width / 5,
+      iterations: 20,
     }
 
     this.positionNodes = this.positionNodes.bind(this)
+    this.updatePosition = this.updatePosition.bind(this)
   }
 
   componentDidMount() {
     this.positionNodes()
   }
 
-  placeNodes() {
-    const { nodes, state } = this
-    const { pos } = state
+  updatePosition(node, x, y) {
+    const { pos } = this.state
 
-    _.each(nodes, (neighbors, idx) => {
-      nodes[idx].current.style.left = pos[idx].x
-      nodes[idx].current.style.right = pos[idx].y
+    this.setState({
+      pos: {
+        ...pos,
+        [node]: {
+          x,
+          y,
+        },
+      },
     })
   }
 
   positionNodes() {
     const { edges, width, height } = this.props
+    const { temperature: temperature_start, iterations } = this.state
 
     const area = width * height
     const space = Math.sqrt(area / edges.length)
@@ -58,30 +65,12 @@ class Graph extends React.Component {
     const f_a = x => x ** 2 / space
     const f_r = x => space ** 2 / x
 
-    const pos = {}
     const disp = {}
 
-    const iterations = 100
-    const temperature_start = width / 5
     let temperature = temperature_start
 
-    _.each(edges, (v_neighbors, vdx) => {
-      this.nodes[vdx].current.style.left = `${Math.round(
-        Math.random() * width
-      )}px`
-      this.nodes[vdx].current.style.top = `${Math.round(
-        Math.random() * height
-      )}px`
-
-      const rect = this.nodes[vdx].current.getBoundingClientRect()
-
-      pos[vdx] = {
-        x: rect.x,
-        y: rect.y,
-      }
-    })
-
     const iterPosition = () => {
+      const { pos } = this.state
       _.each(edges, (v_neighbors, vdx) => {
         disp[vdx] = { x: 0, y: 0 }
 
@@ -128,10 +117,11 @@ class Graph extends React.Component {
         visited[vdx] = true
       })
 
+      const newPos = {}
       _.each(edges, (v_neighbors, vdx) => {
         const mag = Math.sqrt(disp[vdx].x ** 2 + disp[vdx].y ** 2) || 1
 
-        pos[vdx] = {
+        newPos[vdx] = {
           x:
             pos[vdx].x +
             (disp[vdx].x / mag) * Math.min(Math.abs(disp[vdx].x), temperature),
@@ -140,52 +130,77 @@ class Graph extends React.Component {
             (disp[vdx].y / mag) * Math.min(Math.abs(disp[vdx].y), temperature),
         }
 
-        pos[vdx] = {
-          x: Math.min(width / 2, Math.max(-width / 2, pos[vdx].x)),
-          y: Math.min(height / 2, Math.max(-height / 2, pos[vdx].y)),
+        newPos[vdx] = {
+          x: Math.min(width / 2, Math.max(-width / 2, newPos[vdx].x)),
+          y: Math.min(height / 2, Math.max(-height / 2, newPos[vdx].y)),
         }
       })
 
-      temperature = temperature - (1 / iterations) * temperature_start
-
-      _.each(edges, (v_neighbors, vdx) => {
-        this.nodes[vdx].current.style.left = `${width / 2 + pos[vdx].x}px`
-        this.nodes[vdx].current.style.top = `${height / 2 + pos[vdx].y}px`
+      this.setState({
+        pos: newPos,
       })
+
+      temperature = temperature - (1 / iterations) * temperature_start
     }
 
     _.each(_.range(iterations), iter => {
       setTimeout(iterPosition, 100 * iter)
     })
-
-    setTimeout(() => {
-      this.setState({
-        mounted: true,
-      })
-    }, iterations * 100)
   }
 
   render() {
     const { edges } = this.props
-    const { mounted } = this.state
+    const { pos, temperature, iterations } = this.state
 
     return (
-      <div className={css.graph}>
-        {_.map(edges, (neighbors, idx) => (
-          <div key={idx}>
-            <Node forwardRef={this.nodes[idx]} className={css.node}>
-              {idx}
-            </Node>
-            {mounted &&
-              neighbors.map(neighbor => (
-                <Edge
-                  key={neighbor}
-                  from={this.nodes[idx]}
-                  to={this.nodes[neighbor]}
-                />
+      <div>
+        <div
+          className={css.graph}
+          onDrop={event => {
+            event.preventDefault()
+            event.persist()
+            const node = event.dataTransfer.getData('text/plain')
+            this.updatePosition(
+              parseInt(node),
+              event.pageX - 340,
+              event.pageY - 340
+            )
+            console.log()
+          }}
+          onDragOver={event => {
+            event.preventDefault()
+          }}
+        >
+          {_.map(edges, (neighbors, idx) => (
+            <div key={idx}>
+              <Node
+                forwardRef={this.nodes[idx]}
+                className={css.node}
+                idx={idx}
+                updatePosition={this.updatePosition}
+                pos={pos[idx]}
+              >
+                {idx}
+              </Node>
+              {neighbors.map(neighbor => (
+                <Edge key={neighbor} from={pos[idx]} to={pos[neighbor]} />
               ))}
-          </div>
-        ))}
+            </div>
+          ))}
+        </div>
+        <button onClick={this.positionNodes}>Position</button>
+        <input
+          onChange={event => {
+            this.setState({ temperature: parseInt(event.target.value) || 0 })
+          }}
+          value={temperature}
+        />
+        <input
+          onChange={event => {
+            this.setState({ iterations: parseInt(event.target.value) || 0 })
+          }}
+          value={iterations}
+        />
       </div>
     )
   }

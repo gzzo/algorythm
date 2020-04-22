@@ -3,28 +3,14 @@ import React from 'react'
 import css from './edge.scss'
 
 class Edge extends React.PureComponent {
-  constructor(props) {
-    super(props)
-
-    this.updateRects = this.updateRects.bind(this)
-    this.updateRects()
-  }
-
-  updateRects() {
+  render() {
     const { from, to } = this.props
 
-    this.fromRect = from.current.getBoundingClientRect()
-    this.toRect = to.current.getBoundingClientRect()
-  }
+    const startX = from.x + 340 + 25 //+ fromRect.width / 2 + window.scrollX
+    const startY = from.y + 340 + 25 //+ fromRect.height / 2 + window.scrollY
 
-  render() {
-    const { fromRect, toRect } = this
-
-    const startX = fromRect.x + fromRect.width / 2 + window.scrollX
-    const startY = fromRect.y + fromRect.height / 2 + window.scrollY
-
-    const endX = toRect.x + toRect.width / 2 + window.scrollX
-    const endY = toRect.y + toRect.height / 2 + window.scrollY
+    const endX = to.x + 340 + 25 //+ toRect.width / 2 + window.scrollX
+    const endY = to.y + 340 + 25 //+ toRect.height / 2 + window.scrollY
 
     const startControlX = endX
     const startControlY = startY
