@@ -6,7 +6,7 @@ import InlineSourcePlugin from 'html-webpack-inline-source-plugin'
 export default {
   context: path.resolve(__dirname, 'src'),
 
-  entry: ['whatwg-fetch', './index.js'],
+  entry: ['whatwg-fetch', './home.js'],
 
   output: {
     filename: '[name].[contenthash].js',

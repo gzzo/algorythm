@@ -4,7 +4,7 @@ import { hot } from 'react-hot-loader'
 import { Helmet } from 'react-helmet'
 import { ConnectedRouter } from 'connected-react-router'
 
-import Home from 'pages/home'
+import { HomePage } from 'pages/home'
 
 import 'sanitize.css'
 
@@ -21,7 +21,7 @@ class App extends React.Component {
             />
           </Helmet>
           <Switch>
-            <Route path="/" component={Home} />
+            <Route path="/" component={HomePage} />
           </Switch>
         </div>
       </ConnectedRouter>

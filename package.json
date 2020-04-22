@@ -1,9 +1,8 @@
 {
-  "name": "react-base",
-  "version": "3.0.0",
-  "description": "A React starter",
+  "name": "algorythm",
+  "version": "1.0.0",
   "main": "index.js",
-  "repository": "https://github.com/gzzo/react-base",
+  "repository": "https://github.com/gzzo/algorythm",
   "author": "Guido Rainuzzo",
   "license": "MIT",
   "browserslist": [
