@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`pages/home matches snapshot 1`] = `
+<Page>
+  Home
+</Page>
+`;
