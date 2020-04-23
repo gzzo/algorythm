@@ -31,7 +31,7 @@ class Graph extends React.Component {
 
     this.state = {
       pos,
-      temperature: width / 5,
+      temperature: width / 8,
       iterations: 20,
     }
 

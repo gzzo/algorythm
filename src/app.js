@@ -7,6 +7,7 @@ import { ConnectedRouter } from 'connected-react-router'
 import { HomePage } from 'pages/home'
 
 import 'sanitize.css'
+import './app.scss'
 
 class App extends React.Component {
   render() {
@@ -18,6 +19,10 @@ class App extends React.Component {
             <meta
               name="viewport"
               content="width=device-width, initial-scale=1"
+            />
+            <link
+              href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900&display=swap"
+              rel="stylesheet"
             />
           </Helmet>
           <Switch>
