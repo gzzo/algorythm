@@ -1,7 +1,12 @@
+@import 'style/constants';
+
 .graph {
+  background-color: $white-background;
+  border-radius: 2px;
+  border: 1px solid gray;
+  height: 100%;
   position: relative;
   width: 100%;
-  height: 100%;
 }
 
 .node {
