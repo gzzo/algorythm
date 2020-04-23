@@ -23,6 +23,12 @@ export default merge(common, {
     rules: getRules(),
   },
 
+  resolve: {
+    alias: {
+      'react-dom': '@hot-loader/react-dom',
+    },
+  },
+
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.DefinePlugin({

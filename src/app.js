@@ -1,6 +1,6 @@
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
-import { hot } from 'react-hot-loader'
+import { hot } from 'react-hot-loader/root'
 import { Helmet } from 'react-helmet'
 import { ConnectedRouter } from 'connected-react-router'
 
@@ -29,4 +29,4 @@ class App extends React.Component {
   }
 }
 
-export default hot(module)(App)
+export default hot(App)

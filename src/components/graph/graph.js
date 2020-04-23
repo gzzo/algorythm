@@ -36,7 +36,6 @@ class Graph extends React.Component {
     }
 
     this.positionNodes = this.positionNodes.bind(this)
-    this.updatePosition = this.updatePosition.bind(this)
     this.handleDrop = this.handleDrop.bind(this)
   }
 
@@ -44,24 +43,27 @@ class Graph extends React.Component {
     this.positionNodes()
   }
 
-  updatePosition(node, x, y) {
+  handleDrop(event) {
+    event.preventDefault()
+
+    const { width, height } = this.props
     const { pos } = this.state
+
+    const node = parseInt(event.dataTransfer.getData('text/plain'))
 
     this.setState({
       pos: {
         ...pos,
         [node]: {
-          x,
-          y,
+          x: event.pageX - width / 2,
+          y: event.pageY - height / 2,
         },
       },
     })
   }
 
-  handleDrop(event) {
+  handleDragOver(event) {
     event.preventDefault()
-    const node = event.dataTransfer.getData('text/plain')
-    this.updatePosition(parseInt(node), event.pageX - 340, event.pageY - 340)
   }
 
   positionNodes() {
@@ -96,6 +98,7 @@ class Graph extends React.Component {
         <div
           className={css.graph}
           onDrop={this.handleDrop}
+          onDragOver={this.handleDragOver}
           style={{ width: `${width}px`, height: `${height}px` }}
         >
           {_.map(edges, (neighbors, idx) => (

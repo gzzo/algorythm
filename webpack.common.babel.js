@@ -1,4 +1,5 @@
 import path from 'path'
+
 import webpack from 'webpack'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import InlineSourcePlugin from 'html-webpack-inline-source-plugin'
@@ -6,7 +7,7 @@ import InlineSourcePlugin from 'html-webpack-inline-source-plugin'
 export default {
   context: path.resolve(__dirname, 'src'),
 
-  entry: ['whatwg-fetch', './home.js'],
+  entry: ['react-hot-loader/patch', 'whatwg-fetch', './index.js'],
 
   output: {
     filename: '[name].[contenthash].js',

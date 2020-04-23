@@ -51,6 +51,7 @@
   },
   "dependencies": {
     "@babel/register": "^7.7.7",
+    "@hot-loader/react-dom": "^16.13.0",
     "classnames": "^2.2.6",
     "connected-react-router": "^6.6.1",
     "core-js": "^3.6.1",
@@ -83,5 +84,8 @@
     "profile": "webpack --profile --config webpack.prod.babel.js --progress --json > stats.json",
     "start": "webpack-dev-server --progress --config webpack.dev.babel.js --host 0.0.0.0 --env.debug=true",
     "test": "jest"
+  },
+  "resolutions": {
+    "react-helmet/react-side-effect": "^2.1.0"
   }
 }
