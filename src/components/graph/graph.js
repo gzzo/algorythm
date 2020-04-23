@@ -1,6 +1,7 @@
 import React from 'react'
 import _ from 'lodash'
 
+import { getTemperatureIter } from 'utils/graph'
 import { Node } from 'components/node'
 import { Edge } from 'components/edge'
 
@@ -10,6 +11,7 @@ class Graph extends React.Component {
   static defaultProps = {
     width: 680,
     height: 680,
+    nodeSize: 50,
   }
 
   constructor(props) {
@@ -35,6 +37,7 @@ class Graph extends React.Component {
 
     this.positionNodes = this.positionNodes.bind(this)
     this.updatePosition = this.updatePosition.bind(this)
+    this.handleDrop = this.handleDrop.bind(this)
   }
 
   componentDidMount() {
@@ -55,121 +58,45 @@ class Graph extends React.Component {
     })
   }
 
+  handleDrop(event) {
+    event.preventDefault()
+    const node = event.dataTransfer.getData('text/plain')
+    this.updatePosition(parseInt(node), event.pageX - 340, event.pageY - 340)
+  }
+
   positionNodes() {
-    const { edges, width, height } = this.props
-    const { temperature: temperature_start, iterations } = this.state
+    const { edges, width, height, nodeSize } = this.props
+    const { temperature, iterations } = this.state
 
-    const area = width * height
-    const space = Math.sqrt(area / edges.length)
-
-    const f_a = x => x ** 2 / space
-    const f_r = x => space ** 2 / x
-
-    const disp = {}
-
-    let temperature = temperature_start
-
-    const iterPosition = () => {
-      const { pos } = this.state
-      _.each(edges, (v_neighbors, vdx) => {
-        disp[vdx] = { x: 0, y: 0 }
-
-        _.each(edges, (u_neighbors, udx) => {
-          if (udx === vdx) {
-            return
-          }
-
-          const disp_x = pos[vdx].x - pos[udx].x
-          const disp_y = pos[vdx].y - pos[udx].y
-
-          const mag = Math.sqrt(disp_x ** 2 + disp_y ** 2) || 1
-
-          disp[vdx] = {
-            x: disp[vdx].x + (disp_x / mag) * f_r(mag),
-            y: disp[vdx].y + (disp_y / mag) * f_r(mag),
-          }
-        })
-      })
-
-      const visited = {}
-      _.each(edges, (v_neighbors, vdx) => {
-        _.each(v_neighbors, udx => {
-          if (visited[udx]) {
-            return
-          }
-
-          const disp_x = pos[vdx].x - pos[udx].x
-          const disp_y = pos[vdx].y - pos[udx].y
-
-          const mag = Math.sqrt(disp_x ** 2 + disp_y ** 2) || 1
-
-          disp[vdx] = {
-            x: disp[vdx].x - (disp_x / mag) * f_a(mag),
-            y: disp[vdx].y - (disp_y / mag) * f_a(mag),
-          }
-
-          disp[udx] = {
-            x: disp[udx].x + (disp_x / mag) * f_a(mag),
-            y: disp[udx].y + (disp_y / mag) * f_a(mag),
-          }
-        })
-
-        visited[vdx] = true
-      })
-
-      const newPos = {}
-      _.each(edges, (v_neighbors, vdx) => {
-        const mag = Math.sqrt(disp[vdx].x ** 2 + disp[vdx].y ** 2) || 1
-
-        newPos[vdx] = {
-          x:
-            pos[vdx].x +
-            (disp[vdx].x / mag) * Math.min(Math.abs(disp[vdx].x), temperature),
-          y:
-            pos[vdx].y +
-            (disp[vdx].y / mag) * Math.min(Math.abs(disp[vdx].y), temperature),
-        }
-
-        newPos[vdx] = {
-          x: Math.min(width / 2, Math.max(-width / 2, newPos[vdx].x)),
-          y: Math.min(height / 2, Math.max(-height / 2, newPos[vdx].y)),
-        }
-      })
-
-      this.setState({
-        pos: newPos,
-      })
-
-      temperature = temperature - (1 / iterations) * temperature_start
-    }
+    const positionIter = getTemperatureIter({
+      edges,
+      temperature,
+      iterations,
+      width: width - nodeSize,
+      height: height - nodeSize,
+    })
 
     _.each(_.range(iterations), iter => {
-      setTimeout(iterPosition, 100 * iter)
+      setTimeout(() => {
+        const { pos } = this.state
+
+        this.setState({
+          pos: positionIter({ pos }),
+        })
+      }, 100 * iter)
     })
   }
 
   render() {
-    const { edges } = this.props
+    const { edges, width, height, nodeSize } = this.props
     const { pos, temperature, iterations } = this.state
 
     return (
       <div>
         <div
           className={css.graph}
-          onDrop={event => {
-            event.preventDefault()
-            event.persist()
-            const node = event.dataTransfer.getData('text/plain')
-            this.updatePosition(
-              parseInt(node),
-              event.pageX - 340,
-              event.pageY - 340
-            )
-            console.log()
-          }}
-          onDragOver={event => {
-            event.preventDefault()
-          }}
+          onDrop={this.handleDrop}
+          style={{ width: `${width}px`, height: `${height}px` }}
         >
           {_.map(edges, (neighbors, idx) => (
             <div key={idx}>
@@ -179,11 +106,18 @@ class Graph extends React.Component {
                 idx={idx}
                 updatePosition={this.updatePosition}
                 pos={pos[idx]}
-              >
-                {idx}
-              </Node>
+                posXDelta={width / 2 - nodeSize / 2}
+                posYDelta={height / 2 - nodeSize / 2}
+                size={nodeSize}
+              />
               {neighbors.map(neighbor => (
-                <Edge key={neighbor} from={pos[idx]} to={pos[neighbor]} />
+                <Edge
+                  key={neighbor}
+                  from={pos[idx]}
+                  to={pos[neighbor]}
+                  posXDelta={width / 2}
+                  posYDelta={height / 2}
+                />
               ))}
             </div>
           ))}
