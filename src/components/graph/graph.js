@@ -46,17 +46,21 @@ class Graph extends React.Component {
   handleDrop(event) {
     event.preventDefault()
 
-    const { width, height } = this.props
+    const { width, height, nodeSize } = this.props
     const { pos } = this.state
 
-    const node = parseInt(event.dataTransfer.getData('text/plain'))
+    const { idx, offsetX, offsetY } = JSON.parse(
+      event.dataTransfer.getData('text/plain')
+    )
+
+    const rect = event.target.getBoundingClientRect()
 
     this.setState({
       pos: {
         ...pos,
-        [node]: {
-          x: event.pageX - width / 2,
-          y: event.pageY - height / 2,
+        [idx]: {
+          x: event.pageX + (nodeSize / 2 - offsetX) - width / 2 - rect.left,
+          y: event.pageY + (nodeSize / 2 - offsetY) - height / 2 - rect.top,
         },
       },
     })
