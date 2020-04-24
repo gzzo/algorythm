@@ -1,0 +1,13 @@
+@import 'style/constants';
+
+.node_discovered {
+  background-color: $yellow;
+}
+
+.node_visited {
+  background-color: $orange-light;
+}
+
+.node_active {
+  background-color: $green;
+}

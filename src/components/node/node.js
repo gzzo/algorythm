@@ -36,20 +36,13 @@ class Node extends React.Component {
       className,
       forwardRef,
       idx,
-      isActive,
-      isDiscovered,
-      isVisited,
       pos,
       posXDelta,
       posYDelta,
       size,
     } = this.props
 
-    const classes = classNames(css.node, className, {
-      [css.node_active]: isActive,
-      [css.node_visited]: isVisited,
-      [css.node_discovered]: isDiscovered,
-    })
+    const classes = classNames(css.node, className)
 
     return (
       <div

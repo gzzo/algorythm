@@ -1,4 +1,5 @@
 import React from 'react'
+import classNames from 'classnames'
 import _ from 'lodash'
 
 import { getTemperatureIter } from 'utils/graph'
@@ -9,11 +10,9 @@ import css from './graph.scss'
 
 class Graph extends React.Component {
   static defaultProps = {
-    activeNodes: {},
-    discoveredNodes: {},
     height: 680,
+    nodeColors: {},
     nodeSize: 50,
-    visitedNodes: {},
     width: 680,
   }
 
@@ -66,16 +65,25 @@ class Graph extends React.Component {
           x:
             Math.min(
               width - nodeSize / 2,
-              event.pageX +
-                (nodeSize / 2 - offsetX) -
-                rect.left -
-                window.scrollX
+              Math.max(
+                nodeSize / 2,
+                event.pageX +
+                  (nodeSize / 2 - offsetX) -
+                  rect.left -
+                  window.scrollX
+              )
             ) -
             width / 2,
           y:
             Math.min(
               height - nodeSize / 2,
-              event.pageY + (nodeSize / 2 - offsetY) - rect.top - window.scrollY
+              Math.max(
+                nodeSize / 2,
+                event.pageY +
+                  (nodeSize / 2 - offsetY) -
+                  rect.top -
+                  window.scrollY
+              )
             ) -
             height / 2,
         },
@@ -95,8 +103,8 @@ class Graph extends React.Component {
       edges,
       temperature,
       iterations,
-      width: width - nodeSize,
-      height: height - nodeSize,
+      width: width - nodeSize - 2,
+      height: height - nodeSize - 2,
     })
 
     _.each(_.range(iterations), iter => {
@@ -111,15 +119,7 @@ class Graph extends React.Component {
   }
 
   render() {
-    const {
-      activeNodes,
-      discoveredNodes,
-      edges,
-      height,
-      nodeSize,
-      visitedNodes,
-      width,
-    } = this.props
+    const { edges, height, nodeColors, nodeSize, width } = this.props
     const { pos } = this.state
 
     return (
@@ -133,15 +133,12 @@ class Graph extends React.Component {
         {_.map(edges, (neighbors, idx) => (
           <div key={idx}>
             <Node
-              className={css.node}
+              className={classNames(css.node, nodeColors[idx])}
               forwardRef={this.nodes[idx]}
               idx={idx}
-              isActive={idx in activeNodes}
-              isVisited={idx in visitedNodes}
-              isDiscovered={idx in discoveredNodes}
               pos={pos[idx]}
-              posXDelta={width / 2 - nodeSize / 2}
-              posYDelta={height / 2 - nodeSize / 2}
+              posXDelta={width / 2 - nodeSize / 2 - 1}
+              posYDelta={height / 2 - nodeSize / 2 - 1}
               size={nodeSize}
               updatePosition={this.updatePosition}
             />
@@ -149,8 +146,8 @@ class Graph extends React.Component {
               <Edge
                 from={pos[idx]}
                 key={neighbor}
-                posXDelta={width / 2}
-                posYDelta={height / 2}
+                posXDelta={width / 2 - 1}
+                posYDelta={height / 2 - 1}
                 to={pos[neighbor]}
               />
             ))}

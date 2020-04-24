@@ -1,0 +1,11 @@
+@import 'style/constants';
+
+.container {
+  width: 100%;
+}
+
+.progressBar {
+  text-align: center;
+  background: linear-gradient($teal, $teal) no-repeat;
+  transition: background-size 100ms;
+}

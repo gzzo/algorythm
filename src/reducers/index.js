@@ -2,12 +2,10 @@ import { combineReducers } from 'redux'
 import { connectRouter } from 'connected-react-router'
 import { all } from 'redux-saga/effects'
 
-import { reducer as bfs } from './bfs'
-
-function* sampleRootSaga() {}
+import { reducer as bfs, rootSaga as bfsSaga } from './bfs'
 
 export function* rootSaga() {
-  yield all([sampleRootSaga()])
+  yield all([bfsSaga()])
 }
 
 export const reducers = history =>
