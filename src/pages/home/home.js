@@ -4,6 +4,7 @@ import Page from 'components/page'
 import { Coloring } from 'components/coloring'
 import { Header } from 'components/header'
 import { BFS } from 'components/bfs'
+import { DFS } from 'components/dfs'
 
 import css from './home.scss'
 
@@ -13,6 +14,24 @@ class Home extends React.Component {
       <div>
         <Header />
         <Page>
+          <div className={css.section}>
+            <h1>DFS</h1>
+            <DFS
+              id="dfs"
+              edges={[
+                [1, 2, 7],
+                [0, 2, 3, 4],
+                [0, 1, 5, 6],
+                [1],
+                [1],
+                [2],
+                [2],
+                [0, 8, 9],
+                [7],
+                [7],
+              ]}
+            />
+          </div>
           <div className={css.section}>
             <h1>BFS</h1>
             <BFS

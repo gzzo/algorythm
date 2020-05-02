@@ -1,8 +1,9 @@
-import { queue } from 'utils/queue'
 import { take, put, race, call, all, delay } from 'redux-saga/effects'
-import _ from 'lodash'
+
+import { generateBFS, generateColoring, generateDFS } from 'utils/algos'
 
 const INIT_BFS = 'graph/INIT_BFS'
+const INIT_DFS = 'graph/INIT_DFS'
 const INIT_COLORING = 'graph/INIT_COLORING'
 const CHANGE_STEP = 'graph/CHANGE_STEP'
 const UPDATE_STEP = 'graph/UPDATE_STEP'
@@ -14,6 +15,14 @@ const PLAY_DELAY = 500
 export const initBFS = (id, edges) => {
   return {
     type: INIT_BFS,
+    id,
+    edges,
+  }
+}
+
+export const initDFS = (id, edges) => {
+  return {
+    type: INIT_DFS,
     id,
     edges,
   }
@@ -86,94 +95,6 @@ export function* rootSaga() {
   yield all([watchPlay()])
 }
 
-const generateColoring = edges => {
-  const steps = []
-  const colors = {}
-  const nodeQueue = queue()
-
-  const step = () => {
-    steps.push({
-      nodeQueue: nodeQueue.map(item => item),
-      colors: { ...colors },
-    })
-  }
-
-  const getNextColor = color => (color === 0 ? 1 : 0)
-
-  step()
-  nodeQueue.append(0)
-  step()
-
-  while (nodeQueue.length) {
-    const currNode = nodeQueue.pop()
-
-    colors[currNode] = colors[currNode] || 0
-    step(currNode)
-
-    const nextColor = getNextColor(colors[currNode])
-    let canBeColored = true
-    _.each(edges[currNode], neighbor => {
-      if (neighbor in colors) {
-        canBeColored = false
-        return colors[neighbor] !== colors[currNode]
-      }
-
-      colors[neighbor] = nextColor
-      nodeQueue.append(neighbor)
-      step(currNode)
-
-      return true
-    })
-
-    if (!canBeColored) {
-      break
-    }
-  }
-
-  return steps
-}
-
-const generateBFS = edges => {
-  const steps = []
-  const visited = {}
-  const discovered = {}
-  const nodeQueue = queue()
-
-  const step = activeNode => {
-    steps.push({
-      nodeQueue: nodeQueue.map(item => item),
-      visited: { ...visited },
-      discovered: { ...discovered },
-      activeNode,
-    })
-  }
-
-  step(null)
-
-  nodeQueue.append(0)
-  discovered[0] = true
-  step(null)
-
-  while (nodeQueue.length) {
-    const currNode = nodeQueue.pop()
-    visited[currNode] = true
-    step(currNode)
-
-    _.each(edges[currNode], neighbor => {
-      if (discovered[neighbor]) {
-        return
-      }
-
-      discovered[neighbor] = true
-      nodeQueue.append(neighbor)
-      step(currNode)
-    })
-  }
-
-  step(null)
-  return steps
-}
-
 const initialState = {}
 
 export const reducer = (state = initialState, action) => {
@@ -183,6 +104,16 @@ export const reducer = (state = initialState, action) => {
         ...state,
         [action.id]: {
           steps: generateBFS(action.edges),
+          step: 0,
+        },
+      }
+    }
+
+    case INIT_DFS: {
+      return {
+        ...state,
+        [action.id]: {
+          steps: generateDFS(action.edges),
           step: 0,
         },
       }
