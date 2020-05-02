@@ -2,5 +2,7 @@
 node_modules
 dist/
 !dist/.gitignore
+!dist/images/github.png
+!dist/_redirects
 yarn-error.log
 stats.json
