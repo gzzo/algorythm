@@ -4,13 +4,17 @@ import { connect } from 'react-redux'
 
 import { Graph } from 'components/graph'
 import { Queue } from 'components/queue'
-import { ColorKey } from 'components/colorKey'
 import { PlayControls } from 'components/playControls'
-import { initBFS, changeStep, play, pause } from 'reducers/graph'
+import { initColoring, changeStep, play, pause } from 'reducers/graph'
 
-import css from './bfs.scss'
+import css from 'components/coloring/coloring.scss'
 
-class BFS extends React.Component {
+const COLORS = {
+  0: css.node_blue,
+  1: css.node_red,
+}
+
+class Coloring extends React.Component {
   constructor(props) {
     super(props)
 
@@ -18,25 +22,20 @@ class BFS extends React.Component {
   }
 
   componentDidMount() {
-    this.props.initBFS()
+    this.props.initColoring()
   }
 
   getNodeColors() {
     const { graph } = this.props
-    const { discovered, activeNode, visited } = graph
+    const { colors } = graph
+    console.log(colors)
 
     const nodeColors = {}
 
-    _.each(_.keys(discovered), node => {
-      nodeColors[node] = css.node_discovered
+    _.each(colors, (color, node) => {
+      nodeColors[node] = COLORS[color]
     })
-
-    _.each(_.keys(visited), node => {
-      nodeColors[node] = css.node_visited
-    })
-
-    nodeColors[activeNode] = css.node_active
-
+    console.log(nodeColors)
     return nodeColors
   }
 
@@ -61,15 +60,6 @@ class BFS extends React.Component {
     return (
       <div>
         <Queue items={nodeQueue} />
-        <div className={css.colorKey}>
-          <ColorKey
-            colors={{
-              Active: css.node_active,
-              Visited: css.node_visited,
-              Discovered: css.node_discovered,
-            }}
-          />
-        </div>
         <Graph
           edges={edges}
           width={500}
@@ -110,7 +100,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
   return {
     changeStep: step => dispatch(changeStep(id, step)),
-    initBFS: () => dispatch(initBFS(id, edges)),
+    initColoring: () => dispatch(initColoring(id, edges)),
     pause: () => dispatch(pause(id)),
     play: (step, steps) => () => dispatch(play(id, step, steps)),
   }
@@ -127,4 +117,8 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(BFS)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+  mergeProps
+)(Coloring)

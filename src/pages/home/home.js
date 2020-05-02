@@ -1,7 +1,7 @@
 import React from 'react'
 
 import Page from 'components/page'
-import { BFS } from 'components/bfs'
+import { Coloring } from 'components/coloring'
 
 import css from './home.scss'
 
@@ -10,7 +10,7 @@ class Home extends React.Component {
     return (
       <Page>
         <div className={css.graph}>
-          <BFS
+          <Coloring
             id="word"
             edges={[
               [1, 2, 7],
