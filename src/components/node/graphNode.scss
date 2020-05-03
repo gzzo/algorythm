@@ -1,0 +1,10 @@
+@import 'style/constants';
+
+.node {
+  cursor: pointer;
+  transition: top 50ms ease-out, left 50ms ease-out, box-shadow 100ms;
+
+  &:hover {
+    box-shadow: 0 0 8px 3px $gray-light;
+  }
+}

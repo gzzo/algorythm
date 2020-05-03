@@ -6,13 +6,10 @@
   border-radius: 50%;
   border: 2px solid $blue;
   box-shadow: 0 0 3px 1px $gray-light;
-  cursor: pointer;
   display: flex;
   justify-content: center;
-  transition: top 50ms ease-out, left 50ms ease-out, box-shadow 100ms;
   z-index: 10;
 
-  &:hover {
-    box-shadow: 0 0 5px 2px $gray-light;
-  }
+  height: 50px;
+  width: 50px;
 }

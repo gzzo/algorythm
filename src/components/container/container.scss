@@ -1,0 +1,14 @@
+@import 'style/constants';
+
+.items {
+  display: flex;
+  height: 50px;
+}
+
+.node:not(:last-child) {
+  margin-right: 5px;
+}
+
+.node_highlight {
+  background-color: $teal;
+}

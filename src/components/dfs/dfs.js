@@ -3,7 +3,7 @@ import _ from 'lodash'
 import { connect } from 'react-redux'
 
 import { Graph } from 'components/graph'
-import { Queue } from 'components/queue'
+import { Stack } from 'components/container'
 import { ColorKey } from 'components/colorKey'
 import { PlayControls } from 'components/playControls'
 import { initDFS, changeStep, play, pause } from 'reducers/graph'
@@ -60,7 +60,6 @@ class DFS extends React.Component {
 
     return (
       <div>
-        <Queue items={nodeStack} />
         <div className={css.colorKey}>
           <ColorKey
             colors={{
@@ -76,6 +75,7 @@ class DFS extends React.Component {
           height={500}
           nodeColors={this.getNodeColors()}
         />
+        <Stack items={nodeStack} />
         <PlayControls
           step={step}
           steps={steps}

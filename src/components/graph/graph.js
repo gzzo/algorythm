@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import _ from 'lodash'
 
 import { getTemperatureIter } from 'utils/graph'
-import { Node } from 'components/node'
+import { GraphNode } from 'components/node'
 import { Edge } from 'components/edge'
 
 import css from './graph.scss'
@@ -132,7 +132,7 @@ class Graph extends React.Component {
       >
         {_.map(edges, (neighbors, idx) => (
           <div key={idx}>
-            <Node
+            <GraphNode
               className={classNames(css.node, nodeColors[idx])}
               forwardRef={this.nodes[idx]}
               idx={idx}

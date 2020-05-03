@@ -3,7 +3,7 @@ import _ from 'lodash'
 import { connect } from 'react-redux'
 
 import { Graph } from 'components/graph'
-import { Queue } from 'components/queue'
+import { Queue } from 'components/container'
 import { PlayControls } from 'components/playControls'
 import { initColoring, changeStep, play, pause } from 'reducers/graph'
 
@@ -28,14 +28,13 @@ class Coloring extends React.Component {
   getNodeColors() {
     const { graph } = this.props
     const { colors } = graph
-    console.log(colors)
 
     const nodeColors = {}
 
     _.each(colors, (color, node) => {
       nodeColors[node] = COLORS[color]
     })
-    console.log(nodeColors)
+
     return nodeColors
   }
 
@@ -59,13 +58,13 @@ class Coloring extends React.Component {
 
     return (
       <div>
-        <Queue items={nodeQueue} />
         <Graph
           edges={edges}
           width={500}
           height={500}
           nodeColors={this.getNodeColors()}
         />
+        <Queue items={nodeQueue} />
         <PlayControls
           step={step}
           steps={steps}

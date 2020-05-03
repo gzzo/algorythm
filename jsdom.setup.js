@@ -20,6 +20,6 @@ function copyProps(src, target) {
 global.window = window
 global.document = window.document
 global.navigator = {
-  userAgent: 'node.js',
+  userAgent: 'graphNode.js',
 }
 copyProps(window, global)
