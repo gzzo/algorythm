@@ -8,10 +8,8 @@
   background-color: $blue;
 }
 
-.node_green {
-  background-color: $green;
-}
-
-.node_teal {
-  background-color: $teal;
+.graph {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }

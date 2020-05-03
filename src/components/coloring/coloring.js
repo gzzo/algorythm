@@ -58,12 +58,14 @@ class Coloring extends React.Component {
 
     return (
       <div>
-        <Graph
-          edges={edges}
-          width={500}
-          height={500}
-          nodeColors={this.getNodeColors()}
-        />
+        <div className={css.graph}>
+          <Graph
+            edges={edges}
+            width={500}
+            height={500}
+            nodeColors={this.getNodeColors()}
+          />
+        </div>
         <Queue items={nodeQueue} />
         <PlayControls
           step={step}

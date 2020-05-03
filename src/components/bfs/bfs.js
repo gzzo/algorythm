@@ -60,21 +60,23 @@ class BFS extends React.Component {
 
     return (
       <div>
-        <div className={css.colorKey}>
-          <ColorKey
-            colors={{
-              Active: css.node_active,
-              Visited: css.node_visited,
-              Discovered: css.node_discovered,
-            }}
+        <div className={css.graph}>
+          <div className={css.colorKey}>
+            <ColorKey
+              colors={{
+                Active: css.node_active,
+                Visited: css.node_visited,
+                Discovered: css.node_discovered,
+              }}
+            />
+          </div>
+          <Graph
+            edges={edges}
+            width={500}
+            height={500}
+            nodeColors={this.getNodeColors()}
           />
         </div>
-        <Graph
-          edges={edges}
-          width={500}
-          height={500}
-          nodeColors={this.getNodeColors()}
-        />
         <Queue items={nodeQueue} />
         <PlayControls
           step={step}

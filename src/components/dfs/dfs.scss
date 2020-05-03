@@ -11,3 +11,13 @@
 .node_active {
   background-color: $green;
 }
+
+.colorKey {
+  margin-bottom: 5px;
+}
+
+.graph {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
