@@ -15,7 +15,7 @@ class App extends React.Component {
       <ConnectedRouter history={this.props.history}>
         <div>
           <Helmet>
-            <title>Hello</title>
+            <title>Algorythm</title>
             <meta
               name="viewport"
               content="width=device-width, initial-scale=1"
