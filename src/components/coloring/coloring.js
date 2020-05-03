@@ -66,7 +66,9 @@ class Coloring extends React.Component {
             nodeColors={this.getNodeColors()}
           />
         </div>
-        <Queue items={nodeQueue} />
+        <div className={css.container}>
+          <Queue items={nodeQueue} />
+        </div>
         <PlayControls
           step={step}
           steps={steps}

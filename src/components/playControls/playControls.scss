@@ -2,10 +2,19 @@
 
 .container {
   width: 100%;
+  text-align: center;
 }
 
 .progressBar {
-  text-align: center;
   background: linear-gradient($teal, $teal) no-repeat;
   transition: background-size 100ms;
+  border: 1px solid $gray-light;
+}
+
+.playPause {
+  width: 50px;
+}
+
+.controls > button {
+  margin: 0 3px;
 }

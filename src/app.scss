@@ -7,3 +7,17 @@ body {
   background-color: $gray-background;
   color: #333;
 }
+
+button {
+  border: 1px solid $gray-light;
+  border-radius: 2px;
+  transition: background-color 100ms;
+
+  &:not([disabled]) {
+    cursor: pointer;
+
+    &:hover {
+      background-color: $gray-light;
+    }
+  }
+}

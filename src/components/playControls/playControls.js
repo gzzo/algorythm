@@ -55,9 +55,13 @@ class PlayControls extends React.Component {
             {'<'}
           </button>
           {isPlaying === true ? (
-            <button onClick={pause}>pause</button>
+            <button className={css.playPause} onClick={pause}>
+              pause
+            </button>
           ) : (
-            <button onClick={play}>play</button>
+            <button className={css.playPause} onClick={play}>
+              play
+            </button>
           )}
           <button onClick={this.handleNext} disabled={step === steps - 1}>
             {'>'}

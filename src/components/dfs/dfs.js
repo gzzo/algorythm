@@ -77,7 +77,9 @@ class DFS extends React.Component {
             nodeColors={this.getNodeColors()}
           />
         </div>
-        <Stack items={nodeStack} />
+        <div className={css.container}>
+          <Stack items={nodeStack} />
+        </div>
         <PlayControls
           step={step}
           steps={steps}
