@@ -1,16 +1,23 @@
-import { linkedList } from './linkedList'
+import { LinkedList } from './linkedList'
 
-export const queue = () => {
-  const list = linkedList()
+export class Queue {
+  constructor() {
+    this.linkedList = new LinkedList()
+  }
 
-  return {
-    get length() {
-      return list.length
-    },
-    append: list.append,
-    pop: () => {
-      return list.popLeft()
-    },
-    map: list.map,
+  append(item) {
+    return this.linkedList.append(item)
+  }
+
+  pop() {
+    return this.linkedList.popLeft()
+  }
+
+  map(iter) {
+    return this.linkedList.map(iter)
+  }
+
+  get length() {
+    return this.linkedList.length
   }
 }

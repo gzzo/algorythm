@@ -1,11 +1,11 @@
 import _ from 'lodash'
 
-import { queue } from 'utils/queue'
+import { Queue } from 'utils/queue'
 
 export const generateColoring = edges => {
   const steps = []
   const colors = {}
-  const nodeQueue = queue()
+  const nodeQueue = new Queue()
 
   const step = () => {
     steps.push({
@@ -54,7 +54,7 @@ export const generateBFS = edges => {
   const steps = []
   const visited = {}
   const discovered = {}
-  const nodeQueue = queue()
+  const nodeQueue = new Queue()
 
   const step = activeNode => {
     steps.push({

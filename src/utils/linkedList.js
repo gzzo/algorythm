@@ -1,73 +1,71 @@
-import { node } from './node'
+import { ListNode } from './node'
 
-export const linkedList = () => {
-  let head = null
-  let tail = null
-  let length = 0
+export class LinkedList {
+  constructor() {
+    this.head = null
+    this.tail = null
+    this.length = 0
+  }
 
-  return {
-    head,
-    tail,
-    get length() {
-      return length
-    },
-    append: item => {
-      const newNode = node({ val: item })
-      if (head === null) {
-        head = newNode
-        tail = newNode
-      } else {
-        tail.next = newNode
-        newNode.prev = tail
-        tail = newNode
-      }
+  append(item) {
+    const newNode = new ListNode(item)
+    if (this.head === null) {
+      this.head = newNode
+      this.tail = newNode
+    } else {
+      this.tail.next = newNode
+      newNode.prev = this.tail
+      this.tail = newNode
+    }
 
-      length++
-    },
-    pop: () => {
-      if (tail === null) {
-        throw Error('LinkedList is empty')
-      }
+    this.length++
+  }
 
-      const lastItem = tail
-      tail = tail.prev
+  pop() {
+    if (this.tail === null) {
+      throw Error('LinkedList is empty')
+    }
 
-      if (tail === null) {
-        head = null
-      } else {
-        tail.next = null
-      }
+    const lastItem = this.tail
+    this.tail = this.tail.prev
 
-      length--
-      return lastItem.val
-    },
-    popLeft: () => {
-      if (head === null) {
-        throw Error('LinkedList is empty')
-      }
+    if (this.tail === null) {
+      this.head = null
+    } else {
+      this.tail.next = null
+    }
 
-      const firstItem = head
-      head = head.next
+    this.length--
+    return lastItem.val
+  }
 
-      if (head === null) {
-        tail = null
-      } else {
-        head.prev = null
-      }
+  popLeft() {
+    if (this.head === null) {
+      throw Error('LinkedList is empty')
+    }
 
-      length--
-      return firstItem.val
-    },
-    map: iter => {
-      let curr = head
-      const output = []
+    const firstItem = this.head
+    this.head = this.head.next
 
-      while (curr) {
-        output.push(iter(curr.val))
-        curr = curr.next
-      }
+    if (this.head === null) {
+      this.tail = null
+    } else {
+      this.head.prev = null
+    }
 
-      return output
-    },
+    this.length--
+    return firstItem.val
+  }
+
+  map(iter) {
+    let curr = this.head
+    const output = []
+
+    while (curr) {
+      output.push(iter(curr.val))
+      curr = curr.next
+    }
+
+    return output
   }
 }
